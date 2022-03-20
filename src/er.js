@@ -1,5 +1,5 @@
-export const damage_types = ['phys', 'magi', 'fire', 'ligh', 'holy'];
-const attributes = ['str', 'dex', 'int', 'fth', 'arc'];
+export const damage_types = ['physical', 'magic', 'fire', 'lightning', 'holy'];
+export const attributes = ['str', 'dex', 'int', 'fth', 'arc'];
 
 const calcid_data = {
     0: {0: [0, 25, 17], 18: [25, 50, 42], 60: [75, 15, 20], 80: [90, 20, 70]},
@@ -32,13 +32,12 @@ function saturation(calcid, stat) {
     return (add + mul * sat_base) / 100;
 }
 
-function damage(weapon, level, stats) {
+export function damage(weapon, level, stats) {
     const basedmg = weapon.basedmg[level];
     const scaling = weapon.scaling[level];
     
     let totals = damage_types.reduce((obj, typ, i) => Object.assign(obj, {[typ]: basedmg[i]}), {});
-    console.log(totals);
-    weapon.paramscaling.forEach(([typ, attr]) => {
+    weapon.scalinglist.forEach(([typ, attr]) => {
         const ityp = damage_types.indexOf(typ);
         const iatt = attributes.indexOf(attr);
         totals[typ] += basedmg[ityp] * scaling[iatt] * saturation(weapon.calcids[ityp], stats[iatt]);
@@ -46,14 +45,14 @@ function damage(weapon, level, stats) {
     return Object.entries(totals).filter(([_typ, val]) => val > 0).map(([typ, val]) => [typ, Math.floor(val)]).reduce((obj, [typ, val]) => Object.assign(obj, {[typ]: val}), {});
 }
 
-function recommended(weapon, level, twohanding) {
+export function recommended(weapon, level, twohanding) {
     const wbasedmg = weapon.basedmg[level];
     const wscaling = weapon.scaling[level];
 
     const rec_list = attributes.map((att, iatt) => {
         const twohanding_coeff = (twohanding && att === 'str') ? 1.5 : 1
         const scaling = wscaling[iatt];
-        const relevant_types = weapon.paramscaling.filter(([typ, ps_att]) => ps_att === att && wbasedmg[damage_types.indexOf(typ)] > 0).map(([typ, _]) => typ);
+        const relevant_types = weapon.scalinglist.filter(([typ, ps_att]) => ps_att === att && wbasedmg[damage_types.indexOf(typ)] > 0 && wscaling[iatt] > 0).map(([typ, _]) => typ);
         const relevant_thresholds = Array.from(new Set(relevant_types.map(typ => weapon.calcids[damage_types.indexOf(typ)]).map(calcid => Object.keys(calcid_data[calcid])).flat())).map(Number).sort((a, b) => a - b);
         if (relevant_thresholds.length === 0) return [];
 
@@ -71,5 +70,3 @@ function recommended(weapon, level, twohanding) {
     }).flat().sort(([_att1, _attval1, dmginc1], [_att2, _attval2, dmginc2]) => dmginc2 - dmginc1).map(([att, attval, _dmginc]) => [att, attval]);
     return rec_list.filter(([att, attval], i) => i === 0 || rec_list.slice(0, i).every(([att_temp, attval_temp]) => att_temp !== att || attval_temp < attval));    
 }
-
-/////////////////////////////

@@ -1,24 +1,26 @@
 <script>
-	import {weapons} from './quickload.js';
-
 	import Searchbar from './Searchbar.svelte';
+	import Showcase from './Showcase.svelte';
 
-	function random(list) {
-		return list[Math.floor(Math.random() * list.length)];
-	}
-
-	const weapon_name = random(Object.keys(weapons));
-	const weapon = weapons[weapon_name]
-	const infusion_name = random(Object.keys(weapon));
-	const infusion = weapon[infusion_name];
-	const level = Math.floor(Math.random(1) * infusion.scaling.length);
-
-	const description = `${infusion_name} ${weapon_name} +${level}`;
+	let selected_weapons = [];
 </script>
 
 <main>
 	<div id="bg-wrap"/>
-	<Searchbar/>
+	<div id="content">
+		<Searchbar 
+			on:add_weapon={({detail}) => {
+				selected_weapons.push(detail);
+				selected_weapons = selected_weapons;
+			}}
+		/>
+		<Showcase bind:selected_weapons={selected_weapons}
+			on:remove_weapon={({detail}) => {
+				selected_weapons.splice(selected_weapons.indexOf(detail), 1);
+				selected_weapons = selected_weapons;
+			}}
+		/>
+	</div>
 </main>
 
 <style>
@@ -26,8 +28,17 @@
 		width: 100%;
 		height: 100%;
 
+	}
+	
+	#content {
+		padding-top: 25px;
+		width: 100%;
+		height: 100%;
+
 		display: flex;
-		justify-content: center;
+		align-items: center;
+		flex-direction: column;
+		position: relative;
 	}
 
 	#bg-wrap {
@@ -46,8 +57,5 @@
 	}
 
 	@media (min-width: 640px) {
-		main {
-			max-width: none;
-		}
 	}
 </style>

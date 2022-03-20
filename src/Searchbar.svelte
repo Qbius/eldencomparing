@@ -1,7 +1,10 @@
 <script>
+	import {createEventDispatcher} from 'svelte';
     import {Input, ListGroup, ListGroupItem, Badge} from 'sveltestrap';
     import {fade, scale} from "svelte/transition";
 	import {weapons} from './quickload.js';
+
+    const dispatch = createEventDispatcher();
 
     const damage_types = ['physical', 'magic', 'fire', 'lightning', 'holy'];
     const status_types = ['scarlet rot', 'madness', 'sleep', 'bleed', 'poison', 'frost'];
@@ -56,9 +59,8 @@
     }
 
     function add_active_weapon() {
-        chosen_weapons.push(found_weapons[active_index]);
+        dispatch('add_weapon', found_weapons[active_index][0]);
         base_query = '';
-        console.log(chosen_weapons);
     }
 
     function handle_key({key}) {
@@ -96,14 +98,12 @@
         'strike': '#898989',
         'thrust': '#898989',
     };
-
-    let chosen_weapons = [];
 </script>
 
 <div id="container">
     <Input bind:value={base_query} type="search" name="search" placeholder="Name, Weapon Type, Damage Type..." on:keydown={handle_key}/>
     <div style="position: relative;" in:fade out:fade>
-        <ListGroup id="suggestionlist" style="position: absolute; width: 100%; overflow-y: scroll; max-height: 280px;">
+        <ListGroup id="suggestionlist" style="position: absolute; z-index: 100; width: 100%; overflow-y: scroll; max-height: 280px;">
             {#each found_weapons as [name, {dmgtypes, type, phystypes, status}], index}
             <ListGroupItem active={index === active_index} style="padding: 0px; margin: 0px; border: 0px;">
                 <div id={`groupitem${index}`} on:mouseover={() => active_index = index} on:focus={() => active_index = index} class="suggestion" on:mousedown={add_active_weapon}>
