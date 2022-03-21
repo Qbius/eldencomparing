@@ -6,7 +6,7 @@
     const all_types = Array.from(new Set(Object.values(weapons).map(infusions => Object.values(infusions).map(({type}) => type)).flat())).sort();
     let type_selection = all_types.map(_ => true);
 
-    all_types.map((e, index) => [e.toLowerCase(), index]).filter(([e, _]) => ['bow', 'shield', 'seal', 'staff', 'torch'].some(t => e.includes(t))).forEach(([_, index]) => type_selection[index] = false);
+    all_types.map((e, index) => [e.toLowerCase(), index]).filter(([e, _]) => ['bow', 'shield', 'seal', 'staff', 'torch', 'ballista'].some(t => e.includes(t))).forEach(([_, index]) => type_selection[index] = false);
 
     let open_collapse = false;
 
