@@ -42,7 +42,7 @@
                     {/each}
                 </div>
                 <div style="display: flex;">
-                    {#each Object.entries(damage(selected_weapon, selected_level, attributes.map(att => progtotal[att] ?? 10))).sort(([typ1, _val1], [typ2, _val2]) => damage_types.indexOf(typ1) - damage_types.indexOf(typ2)) as [typ, val]}
+                    {#each Object.entries(damage(selected_weapon, selected_level, attributes.map(att => Math.floor((progtotal[att] ?? 10)) * ((twohanding && att === 'str') ? 1.5 : 1)))).sort(([typ1, _val1], [typ2, _val2]) => damage_types.indexOf(typ1) - damage_types.indexOf(typ2)) as [typ, val]}
                     <div class="content-stats">
                         <span style="font-size: 14px;">{typ.slice(0, 4)}</span>
                         <span style="font-size: 18px;">{val}</span>
