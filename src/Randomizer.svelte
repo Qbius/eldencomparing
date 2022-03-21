@@ -21,9 +21,9 @@
 </script>
 
 <div id="component">
-        <Button disabled={!type_selection.some(e => e)} on:click={() => dispatch('add_weapon', random_weapon(selected_types))}>RANDOM</Button>
+        <Button color="primary" disabled={!type_selection.some(e => e)} on:click={() => dispatch('add_weapon', random_weapon(selected_types))}>RANDOM</Button>
         <div style="display: flex; flex-direction: column;">
-            <Button on:click={() => open_collapse = !open_collapse} on:blur={() => open_collapse = false}><Icon style="font-size: 16px;" name="list-ul"/></Button>
+            <Button color="primary" on:click={() => open_collapse = !open_collapse} on:blur={() => open_collapse = false}><Icon style="font-size: 16px;" name="list-ul"/></Button>
             <div style="position: relative;">
                 <Collapse isOpen={open_collapse} style="position: absolute; z-index: 10;" on:blur={() => open_collapse = false}>
                     <Card body>
@@ -33,7 +33,7 @@
                                 <Input type="switch" label={type} bind:checked={type_selection[index]}/>
                                 {/each}
                             </div>
-                            <div style="width: 300px;">
+                            <div style="width: 210px;">
                                 {#each all_types.slice(Math.floor(all_types.length / 2)) as type, index}
                                 <Input type="switch" label={type} bind:checked={type_selection[index + Math.floor(all_types.length / 2)]}/>
                                 {/each}
