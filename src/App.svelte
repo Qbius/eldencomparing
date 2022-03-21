@@ -1,6 +1,7 @@
 <script>
 	import Searchbar from './Searchbar.svelte';
 	import Showcase from './Showcase.svelte';
+	import Randomizer from './Randomizer.svelte';
 
 	let selected_weapons = [];
 </script>
@@ -9,14 +10,21 @@
 	<div id="bg-wrap"/>
 	<div id="content">
 		<Searchbar 
-			on:add_weapon={({detail}) => {
-				selected_weapons.push(detail);
+			on:add_weapon={({detail: weapon_name}) => {
+				selected_weapons.push(weapon_name);
+				selected_weapons = selected_weapons;
+			}}
+		/>
+		<Randomizer
+			on:add_weapon={({detail: weapon_name}) => {
+				console.log(weapon_name);
+				selected_weapons.push(weapon_name);
 				selected_weapons = selected_weapons;
 			}}
 		/>
 		<Showcase bind:selected_weapons={selected_weapons}
-			on:remove_weapon={({detail}) => {
-				selected_weapons.splice(selected_weapons.indexOf(detail), 1);
+			on:remove_weapon={({detail: to_remove_index}) => {
+				selected_weapons.splice(to_remove_index, 1);
 				selected_weapons = selected_weapons;
 			}}
 		/>

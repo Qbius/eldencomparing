@@ -8,10 +8,10 @@
 </script>
 
 <div id="component">
-    {#each (selected_weapons ?? []) as name}
+    {#each (selected_weapons ?? []) as name, index}
         <div class="weapon-card">
             <Weaponcard {name} on:remove_weapon={() => {
-                dispatch('remove_weapon', name);
+                dispatch('remove_weapon', index);
                 setTimeout(() => selected_weapons = selected_weapons, 1);
             }}/>
         </div>

@@ -1,5 +1,5 @@
 <script>
-    import {Card, CardHeader, CardBody, CardTitle, CardText, CardFooter, Input, Button, Icon} from 'sveltestrap';
+    import {Card, CardHeader, CardBody, CardTitle, CardText, CardFooter, Input, Button, Badge} from 'sveltestrap';
     import {weapons} from './quickload.js';
     import {attributes, damage_types, damage, recommended} from './er.js';
 	import {createEventDispatcher} from 'svelte';
@@ -26,7 +26,8 @@
 
 <Card class="mb-3">
     <CardHeader>
-        <CardTitle>{name}</CardTitle>
+        <CardTitle style="margin-right: 10px;">{name}</CardTitle>
+        <Badge>{selected_weapon.type}</Badge>
     </CardHeader>
     <CardBody>
     <CardText>
